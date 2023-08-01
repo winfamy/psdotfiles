@@ -11,8 +11,6 @@ Copy-Item -Force ([IO.Path]::Combine($PSScriptRoot, "Profile.ps1")) $profile
 
 # import modules from local module lib
 Import-Module EnvPathFunctions
-
-
 $pathsToAddToPath = @(
     Join-Path $PSScriptRoot "Path"
 );
@@ -25,7 +23,10 @@ foreach ($path in $pathsToAddToPath) {
 }
 
 
-# bitwarden
+# load bitwarden stuff
+$email = Read-Host "Bitwarden Email" -AsSecureString
+$email_plaintext = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($email))
+[Environment]::SetEnvironmentVariable("BW_EMAIL", $email_plaintext, "User")
 $pwd = Read-Host "Bitwarden Master Password" -AsSecureString
 $pwd_plaintext = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pwd))
 [Environment]::SetEnvironmentVariable("BW_PW", $pwd_plaintext, "User")
